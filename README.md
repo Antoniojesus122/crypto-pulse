@@ -31,20 +31,27 @@ flowchart LR
     F[Prefect Scheduler<br/>cada 1h] -.orquesta.-> B
     F -.orquesta.-> C
     F -.orquesta.-> D
-🧰 Stack
-Capa	Tecnología
-Lenguaje	Python 3.11+
-Orquestación	Prefect 2
-Base de datos	PostgreSQL 16
-Transformaciones	SQL (vistas + vistas materializadas)
-Dashboard	Streamlit + Plotly
-Contenedores	Docker Compose
-Tests	pytest + pytest-cov + pytest-mock
-Lint	ruff
-CI	GitHub Actions
-🚀 Quick start
+```
+
+## 🧰 Stack
+
+| Capa | Tecnología |
+|---|---|
+| Lenguaje | Python 3.11+ |
+| Orquestación | Prefect 2 |
+| Base de datos | PostgreSQL 16 |
+| Transformaciones | SQL (vistas + vistas materializadas) |
+| Dashboard | Streamlit + Plotly |
+| Contenedores | Docker Compose |
+| Tests | pytest + pytest-cov + pytest-mock |
+| Lint | ruff |
+| CI | GitHub Actions |
+
+## 🚀 Quick start
+
 Requisitos: Docker, Python 3.11+, Git.
 
+```bash
 # 1. Clonar e instalar
 git clone https://github.com/Antoniojesus122/crypto-pulse.git
 cd crypto-pulse
@@ -60,15 +67,18 @@ python -m crypto_pulse.flows
 
 # 4. Lanzar el dashboard
 streamlit run dashboard/app.py
+```
+
 Abre http://localhost:8501.
 
-📊 Capturas
-TODO: añadir screenshots reales del dashboard tras ejecutar el pipeline.
+## 📊 Capturas
 
-Dashboard - resumen
-Dashboard - detalle moneda
+![Dashboard - resumen](docs/screenshot_overview.png)
+![Dashboard - detalle moneda](docs/screenshot_detail.png)
 
-🗂️ Estructura del proyecto
+## 🗂️ Estructura del proyecto
+
+```
 crypto-pulse/
 ├── src/crypto_pulse/      # código del pipeline
 │   ├── config.py          # settings con pydantic-settings
@@ -87,38 +97,47 @@ crypto-pulse/
 ├── .github/workflows/ci.yml
 ├── docker-compose.yml
 └── pyproject.toml
-📐 Modelo de datos
-Capa RAW (datos crudos de la API):
+```
 
-raw.coin_prices (id, symbol, name, current_price, market_cap, …, ingested_at)
-Capa MARTS (datos listos para consumo):
+## 📐 Modelo de datos
 
-marts.coins_latest — último snapshot por moneda (vista normal)
-marts.top_movers_24h — top 10 subidas + top 10 bajadas (vista normal)
-marts.daily_ohlc — OHLC diario por moneda (vista materializada)
-marts.volatility_7d — coeficiente de variación 7d (vista materializada)
-🧪 Tests
+**Capa RAW** (datos crudos de la API):
+
+- `raw.coin_prices` (id, symbol, name, current_price, market_cap, …, ingested_at)
+
+**Capa MARTS** (datos listos para consumo):
+
+- `marts.coins_latest` — último snapshot por moneda (vista normal)
+- `marts.top_movers_24h` — top 10 subidas + top 10 bajadas (vista normal)
+- `marts.daily_ohlc` — OHLC diario por moneda (vista materializada)
+- `marts.volatility_7d` — coeficiente de variación 7d (vista materializada)
+
+## 🧪 Tests
+
+```bash
 pytest                    # todos los tests
 pytest -v                 # verboso
 pytest --cov              # con cobertura
 ruff check src tests      # lint
-Cobertura actual: >80% en módulos del pipeline. Postgres real en tests de integración usando una fixture que trunca la tabla antes/después.
+```
 
-⚙️ Decisiones técnicas
-Prefect 2 vs Airflow: Prefect para arrancar (DX más amable, menos boilerplate). Airflow vendrá en el siguiente proyecto.
-SQLAlchemy Core vs ORM: Core porque mantiene cercanía al SQL real (más educativo y más típico en DE).
-Vistas normales vs materializadas: las que necesitan frescura instantánea son normales (coins_latest, top_movers_24h); las que cachean datos pasados son materializadas (daily_ohlc, volatility_7d).
-Streamlit vs Metabase: Streamlit porque es código (versionable, deployable, customizable). Metabase sería ideal para dashboards corporativos.
-🛣️ Roadmap
-sin completar
-Deploy del dashboard en Streamlit Community Cloud
-sin completar
-Migrar transformaciones a dbt
-sin completar
-Añadir tests de calidad de datos con Great Expectations
-sin completar
-Recoger datos en streaming con websockets de Binance
-sin completar
-Migrar orquestación a Airflow
-📝 Licencia
-MIT — ver LICENSE.
+Cobertura actual: **>80%** en módulos del pipeline. Postgres real en tests de integración usando una fixture que trunca la tabla antes/después.
+
+## ⚙️ Decisiones técnicas
+
+- **Prefect 2 vs Airflow**: Prefect para arrancar (DX más amable, menos boilerplate). Airflow vendrá en el siguiente proyecto.
+- **SQLAlchemy Core vs ORM**: Core porque mantiene cercanía al SQL real (más educativo y más típico en DE).
+- **Vistas normales vs materializadas**: las que necesitan frescura instantánea son normales (`coins_latest`, `top_movers_24h`); las que cachean datos pasados son materializadas (`daily_ohlc`, `volatility_7d`).
+- **Streamlit vs Metabase**: Streamlit porque es código (versionable, deployable, customizable). Metabase sería ideal para dashboards corporativos.
+
+## 🛣️ Roadmap
+
+- [ ] Deploy del dashboard en Streamlit Community Cloud
+- [ ] Migrar transformaciones a dbt
+- [ ] Añadir tests de calidad de datos con Great Expectations
+- [ ] Recoger datos en streaming con websockets de Binance
+- [ ] Migrar orquestación a Airflow
+
+## 📝 Licencia
+
+MIT — ver [LICENSE](LICENSE).
